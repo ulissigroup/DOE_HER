@@ -106,9 +106,7 @@ def echem_stabilities(*args, overwrite=False, unique_entries=True, **kwargs):
 
 
 def binary_echem_stabilities(
-    dir_path="../data/pourbaix_stabilities",
-    file_prefix="echem_stab_",
-    **kwargs
+    dir_path="../data/pourbaix_stabilities", file_prefix="echem_stab_", **kwargs
 ):
     # Convenience function to run all binary combinations of a given metal list
     kwargs.setdefault(
@@ -220,13 +218,9 @@ def adsorption_energies(min_energy=False):
     ads_df = pd.read_pickle("../data/gemnet_relax_90_adsorption_energies.pkl")
     if min_energy:
         ads_df["adsorption_energy_H"] = ads_df.min_adsorption_energy
-        ads_df = ads_df.drop(
-            ["min_adsorption_energy", "adsorption_energies"], axis=1
-        )
+        ads_df = ads_df.drop(["min_adsorption_energy", "adsorption_energies"], axis=1)
     else:
         ads_df["adsorption_energy_H"] = ads_df.surf_adsorption_energies
-        ads_df = ads_df.drop(
-            ["min_adsorption_energy", "adsorption_energies"], axis=1
-        )
+        ads_df = ads_df.drop(["min_adsorption_energy", "adsorption_energies"], axis=1)
         ads_df = ads_df.explode("adsorption_energy_H")
     return ads_df
