@@ -220,7 +220,7 @@ def adsorption_energies(min_energy=False):
         ads_df["adsorption_energy_H"] = ads_df.min_adsorption_energy
         ads_df = ads_df.drop(["min_adsorption_energy", "adsorption_energies"], axis=1)
     else:
-        ads_df["adsorption_energy_H"] = ads_df.surf_adsorption_energies
+        ads_df["adsorption_energy_H"] = ads_df.adsorption_energies
         ads_df = ads_df.drop(["min_adsorption_energy", "adsorption_energies"], axis=1)
         ads_df = ads_df.explode("adsorption_energy_H")
     return ads_df
