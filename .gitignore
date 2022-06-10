@@ -1,3 +1,4 @@
+data/pourbaix_stabilities/*
 *.docx
 !Highlights.docx
 extra_figs/
