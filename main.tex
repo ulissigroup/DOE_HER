@@ -39,7 +39,6 @@
 %% \documentclass[final,5p,times,twocolumn]{elsarticle}
 
 \usepackage[margin=0.5in]{geometry}
-usepackage{float}
 
 %% For including figures, graphicx.sty has been loaded in
 %% elsarticle.cls. If you prefer to use the old commands
@@ -135,7 +134,7 @@ For every metal system (e.g. Au-Ni), corresponding surface minimum adsorption en
 \label{figure_2}
 \end{figure}
 
-\begin{figure}[H]
+\begin{figure}[h!]
 \centering
     \includegraphics[width=0.6\textwidth]{figures/fig_3.pdf}
 \caption{A schematic detailing the formation of the volcano plot for the example of the gold-nickel system. (left) The y-axis of the volcano plot is constructed using a set of experiments conducted in the same chemical system (top left; a single well plate is shown). For each experiment, the maximum rate of change over time is determined after smoothing (center left), and then experiments conducted at the same conditions are averaged to create a map of maximum rate as a function of composition (bottom left). The highest value is then used to represent the reaction rate of the chemical system on the volcano plot (bottom right). (right) The x-axis of the volcano plot is constructed starting with crystal structures taken from the Materials Project. A Pourbaix Diagram is used to find stable crystals at representative chemical conditions (top right). Then, hydrogen adsorption energy predictions are made for enumerated sites, and the lowest value is taken for every surface on each crystal (two representative surfaces chosen). The surface closest to -0.24 eV is used to represent the chemical system on the x-axis of the volcano plot (bottom right).
