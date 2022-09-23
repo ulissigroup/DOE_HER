@@ -12,11 +12,22 @@ from pymatgen.analysis.pourbaix_diagram import PourbaixDiagram
 
 
 def echem_stab(chemsys, pickle_path, pbx_dia=None, pH=8.5, V=-1.2, conc=6e-4):
-    """
-    Pulls Pourbaix stabilities of all concentrations in 'concs' for elements A and B,
+    """Pulls Pourbaix stabilities of all concentrations in 'concs' for elements A and B,
     then pickles the resulting dataframe as "fpre+$A+$B+'.pkl'".
     Note that the saved dataframe is not processed in any way.
-    !This is a much faster implementation across the entire dataset than PourbaixStabilitiesC!
+
+    Args:
+        chemsys (List[str]): A list of elements
+        pickle_path (str): location to pickle the output
+        pbx_dia (pymatgen.analysis.pourbaix_diagram.PourbaixDiagram, optional): electrochemical system to evaluate the stability of. Defaults to None.
+        pH (float, optional): pH of interest. Defaults to 8.5.
+        V (float, optional): voltage of interest. Defaults to -1.2.
+        conc (float, optional): ion concentration of interest. Defaults to 6e-4.
+
+    Returns:
+        pd.core.frame.DataFrame: electrochemical system and stability of all entries in that system.
+    """
+    """
 
 
     Args:
@@ -26,7 +37,7 @@ def echem_stab(chemsys, pickle_path, pbx_dia=None, pH=8.5, V=-1.2, conc=6e-4):
         fpre       The prefix of the filepath to be saved at
 
     Returns:
-        None
+        pd.core.frame.DataFrame: electrochemical system and the stabilities of all entries in that system.
     """
 
     failed_entries = []
@@ -108,7 +119,15 @@ def echem_stabilities(*args, overwrite=False, unique_entries=True, **kwargs):
 def binary_echem_stabilities(
     dir_path="../data/pourbaix_stabilities", file_prefix="echem_stab_", **kwargs
 ):
-    # Convenience function to run all binary combinations of a given metal list
+    """Convenience function to get electrochemical stabilities of all binary combinations.
+
+    Args:
+        dir_path (str, optional): Path of the directory where electrochemical stability data is stored. Defaults to "../data/pourbaix_stabilities".
+        file_prefix (str, optional): Prepended to the chemical system to name electrochemical stability files. Defaults to "echem_stab_".
+
+    Returns:
+        pd.core.frame.DataFrame: the electrochemical system and the stability of all entries in that system.
+    """
     kwargs.setdefault(
         "V_range",
         [
@@ -153,7 +172,22 @@ def pull_echem_stabilities(
     overwrite=True,
     **kwargs
 ):
+    """Get electrochemical entries and stability data from the Materials Project API.
 
+    Args:
+        chemistries (List[List[str]]): Metal systems of interest
+        pH_range (List[float], optional): pH maximum and minimum of interest. Defaults to [ 8.5, ].
+        V_range (List[float], optional): Voltage maximum and minimum of interest. Defaults to [ -1.2, ].
+        pH_step (float_, optional): Difference between consecutive pHs to pull data for. If None, sample the first and second point of pH_range. Defaults to None.
+        V_step (List[float], optional): Difference between consecutive voltages to pull data for. If None, sample the first and second point of V_range. Defaults to None.
+        conc (float, optional): Ion concentrations to assume. Defaults to 6e-4.
+        dir_path (str, optional): Location of directory to store data in. Defaults to "../data/pourbaix_stabilities".
+        file_prefix (str, optional): Prepended to the metal system to form individual file names. Defaults to "echem_stab_".
+        overwrite (bool, optional): If True, overwrite existing files. Defaults to True.
+
+    Returns:
+        pd.core.frame.DataFrame: The electrochemical systems and stabilities of each entry.
+    """
     # Include right-hand limits
     if (len(pH_range) == 2) and (pH_step is not None):
         pH_range[1] = pH_range[1] + 10 * np.finfo(np.float64).eps
@@ -211,10 +245,23 @@ def pull_echem_stabilities(
 
 
 def experimental_data():
+    """Load experimental data
+
+    Returns:
+        pd.core.frame.DataFrame: Experimental data for water/TEOA systems.
+    """
     return pd.read_pickle("../data/experimental_data.pkl")
 
 
 def adsorption_energies(min_energy=False):
+    """Load hydrogen adsorption energies for relevant chemical systems as predicted by Gemnet after relaxing for 90 steps.
+
+    Args:
+        min_energy (bool, optional): Return the minimum adsorption energy on each surface. Defaults to False.
+
+    Returns:
+        pd.core.frame.DataFrame: Adsorption energy predictions.
+    """
     ads_df = pd.read_pickle("../data/gemnet_relax_90_adsorption_energies.pkl")
     if min_energy:
         ads_df["adsorption_energy_H"] = ads_df.min_adsorption_energy
